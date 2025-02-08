@@ -1,5 +1,6 @@
 build/
-vendor/
+vendor/glfw
+vendor/glm
 assets/
 .cache/
 

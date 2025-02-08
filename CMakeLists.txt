@@ -12,6 +12,8 @@ add_executable(glexe
     src/core/buffer.cc
     vendor/glad/src/glad.c)
 
+find_package(OpenGL REQUIRED)
+
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
 
@@ -20,5 +22,6 @@ target_include_directories(glexe PUBLIC
     vendor/stb)
 
 target_link_libraries(glexe PUBLIC
+    OpenGL::GL
     glfw
     glm::glm)

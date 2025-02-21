@@ -1,13 +1,17 @@
 #pragma once
 
 #include "glad/glad.h"
-#include <string>
+#include "GLFW/glfw3.h"
+
 #include <iostream>
+#include <string>
 
 class Texture {
-public:
-    unsigned int id;
+private:
+    unsigned int texture;
 
-    Texture(std::string& path);
+public:
+    Texture(std::string path);
+
     void bind();
 };

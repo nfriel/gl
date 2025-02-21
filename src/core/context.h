@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -7,15 +9,15 @@
 
 class Context {
 public:
-    int sw;
-    int sh;
-
     GLFWwindow *window;
 
-    Context(int w, int h);
-    void clear();
-    void swap();
-    void quit();
-};
+    int w;
+    int h;
 
-void resize(GLFWwindow *window, int w, int h);
+public:
+    Context(int width, int height);
+
+    bool windowIsOpen();
+    void clear();
+    void refresh();
+};

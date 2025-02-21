@@ -1,14 +1,9 @@
 #include "context.h"
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
-#include <iostream>
-
-Context::Context(int w, int h)
+Context::Context(int width, int height)
 {
-    sw = w;
-    sh = h;
+    this->w = width;
+    this->h = height;
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -16,22 +11,26 @@ Context::Context(int w, int h)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(sw, sh, "gl", nullptr, nullptr);
-    if (window == nullptr) {
+    this->window = glfwCreateWindow(this->w, this->h, "gl", nullptr, nullptr);
+    if (this->window == nullptr) {
         std::cout << "-- glfwCreateWindow error\n";
         glfwTerminate();
         return;
     }
-    glfwMakeContextCurrent(window);
-    glfwSetWindowSizeCallback(window, resize);
+
+    glfwMakeContextCurrent(this->window);
+    glfwSetWindowSizeCallback(this->window, resize);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "-- glad init error\n";
-            glfwTerminate();
-            return;
+        std::cout << "-- Unable to initialize glad\n";
+        glfwTerminate();
+        return;
     }
+}
 
-    glEnable(GL_DEPTH_TEST);
+bool Context::windowIsOpen()
+{
+    return !glfwWindowShouldClose(this->window);
 }
 
 void Context::clear()
@@ -40,20 +39,8 @@ void Context::clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Context::swap()
+void Context::refresh()
 {
     glfwPollEvents();
-    glfwSwapBuffers(window);
-}
-
-void Context::quit()
-{
-    glfwTerminate();
-}
-
-void resize(GLFWwindow *window, int w, int h)
-{
-    glViewport(0, 0, w, h);
-    std::cout << "-- window resized to "
-        << w << "x" << h << "\n";
+    glfwSwapBuffers(this->window);
 }

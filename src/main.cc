@@ -28,38 +28,31 @@ int main()
     while (ctx.windowIsOpen()) {
         ctx.clear();
 
-        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view  = glm::mat4(1.0f);
         glm::mat4 proj  = glm::mat4(1.0f);
 
-        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        proj = glm::perspective(glm::radians(45.0f), /* float(ctx.w) / float(ctx.h),*/ 1.0f, 0.1f, 100.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
+        proj = glm::perspective(glm::radians(45.0f), float(ctx.w) / float(ctx.h), 0.1f, 100.0f);
 
-        shader.setMat4("model", model);
         shader.setMat4("view", view);
         shader.setMat4("proj", proj);
 
         buf.bind();
         face.bind();
+        shader.use();
 
-        for (int i = 0; i < 10; i++) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
+        // Central cube
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, float(glfwGetTime() * glm::radians(30.0f)), glm::vec3(0.0f, 1.0f, 0.0f));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            if (i % 2) {
-                float angle = 20.0f * i;
-                model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            } else {
-                float angle = 10.0f * i;
-                model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            }
-
-            shader.setMat4("model", model);
-
-            shader.use();
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        // Orbiting cube
+        model = glm::mat4(1.0f);
+        model = glm::rotate(model, float(glfwGetTime() * glm::radians(100.0f)), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         ctx.refresh();
     }
